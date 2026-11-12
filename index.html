@@ -2131,31 +2131,12 @@ if(MASK){
 }
 })();
 </script>
-<!-- ========== 访问统计（云服务数据库） ========== -->
-<!-- publicConfig 整段来自 workbuddy_cloud_service 的 activate 返回值，勿手改；换域名需同步更新 -->
-<script>
-/* 访问统计的云服务 Origin 白名单只认 human-samples 那个域名。
-   迁移到 CloudBase 后不在那儿加载 SDK：省 71KB，也避免每次访问都发一个注定 401 的请求。
-   以后要恢复统计：改 STAT_HOST，并把新域名加进云服务的 Origin 白名单。 */
-(function(){
-  var STAT_HOST = 'human-samples.app.workbuddy.host';
-  if (location.hostname !== STAT_HOST) return;
-  var s = document.createElement('script');
-  s.src = 'assets/sdk.js';
-  s.defer = true;
-  document.head.appendChild(s);
-})();
-</script>
+<!-- ========== 访问统计（CloudBase HTTP 函数 + PostgreSQL） ========== -->
 <script>
 (function(){
-  var PUBLIC_CONFIG = {
-    endpoint: 'https://human-samples.app.workbuddy.host',
-    oauthRelayBaseUrl: 'https://www.workbuddy.cn/v2/as/genie-baas/oauth',
-    publishableKey: 'wbpk_srI4vzJ1oPjeEl2BTnazU7_DAP1EXSVNB59TTtuX4Jeb1Vmil064JAF'
-  };
+  var API = 'https://renjian-yangben-d6f445ow819fa898.service.tcloudbase.com/stats';
   var el = document.getElementById('visitStat');
   if (!el) return;
-  if (location.hostname !== 'human-samples.app.workbuddy.host') return;
 
   var KEY = 'rj-visitor-id';
   function visitorId(){
@@ -2171,67 +2152,32 @@ if(MASK){
       return 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
     }
   }
-  function todayStr(){
-    var d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
   function show(today, total){
     el.innerHTML = '<span class="vs-i">今日 <b>' + today + '</b> 人来过</span>'
       + '<span class="vs-dot">·</span>'
       + '<span class="vs-i">累计 <b>' + total + '</b> 人</span>';
     el.hidden = false;
   }
-  /* 主键冲突=这台设备今天已登记，属正常情况，静默跳过 */
-  function ignoreDup(p){
-    return p.then(function(r){ return r; }, function(err){
-      if (err && (err.code === '23505' || /duplicate key/i.test(err.message || ''))) return null;
-      throw err;
+  function boot(){
+    if (!window.fetch) return;
+    fetch(API, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({visitorId: visitorId()}),
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'no-store'
+    }).then(function(r){
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(d){
+      if (d && typeof d.today === 'number' && typeof d.total === 'number') show(d.today, d.total);
+    }).catch(function(e){
+      try{ console.debug('[visit-stat] skipped:', e && (e.message || e)); }catch(_){}
     });
   }
-
-  function boot(){
-    if (!window.WorkBuddyCloud || !WorkBuddyCloud.createWorkBuddyCloud) return;
-    var cloud;
-    try{
-      cloud = WorkBuddyCloud.createWorkBuddyCloud({
-        endpoint: PUBLIC_CONFIG.endpoint,
-        oauthRelayBaseUrl: PUBLIC_CONFIG.oauthRelayBaseUrl,
-        publishableKey: PUBLIC_CONFIG.publishableKey
-      });
-    }catch(e){ return; }
-
-    var db = cloud.database, vid = visitorId(), day = todayStr();
-    ignoreDup(db.from('visit_devices').insert({ visitor: vid }))
-      .then(function(){ return ignoreDup(db.from('visit_daily').insert({ day: day, visitor: vid })); })
-      .then(function(){
-        /* 2026-10-23：SDK 的 count 现在恒返回 null（数据还在），改成取行再数长度 */
-        return Promise.all([
-          db.from('visit_daily').select('visitor').eq('day', day),
-          db.from('visit_devices').select('visitor')
-        ]);
-      })
-      .then(function(res){
-        var t = (res[0] && res[0].data) ? res[0].data.length : 0;
-        var a = (res[1] && res[1].data) ? res[1].data.length : 0;
-        if (a > 0) show(t, a);
-      })
-      .catch(function(e){
-        /* 统计失败不影响主内容，保持隐藏；留一行 debug 方便排查 */
-        try{ console.debug('[visit-stat] skipped:', e && (e.message || e.code || e)); }catch(_){}
-      });
-  }
-
-  /* 等 SDK 就绪再跑：sdk.js 是 defer 加载，load 事件不一定等得到它 */
-  function waitSdk(n){
-    if (window.WorkBuddyCloud && WorkBuddyCloud.createWorkBuddyCloud) { boot(); return; }
-    if (n > 40) return;                       /* 最多等 10 秒，等不到就放弃 */
-    setTimeout(function(){ waitSdk(n + 1); }, 250);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ waitSdk(0); });
-  } else {
-    waitSdk(0);
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 </body>
