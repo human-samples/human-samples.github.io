@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://renjiannews.github.io/sitemap.xml
+Sitemap: https://human-samples.github.io/sitemap.xml
