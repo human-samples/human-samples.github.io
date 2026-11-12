@@ -1365,7 +1365,9 @@ function syncNavActive(){
 var CHANGELOG = [
   { date:'2026-11-12', items:[
     { t:'chg', h:'主站迁到 human-samples.github.io',
-      p:'GitHub Pages 成为主站；以后每天由本机构建、提交、推送，不再需要手工开 WorkBuddy。旧短域名不再作为主站。' }
+      p:'GitHub Pages 成为主站；以后每天由本机构建、提交、推送，不再需要手工开 WorkBuddy。旧短域名不再作为主站。' },
+    { t:'new', h:'访问统计迁到 CloudBase',
+      p:'不再依赖 WorkBuddy 云服务：GitHub Pages 上也能显示「今日 N 人来过 · 累计 M 人」。前端只发一个随机 visitorId，后端用 PostgreSQL 的 (day, visitor_id) 主键去重；旧统计数字从 0 开始。' }
   ]},
   { date:'2026-11-07', items:[
     { t:'chg', h:'采集逻辑改为「每天两个行业、六天一轮」',
