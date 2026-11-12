@@ -1,0 +1,15 @@
+# macOS / exFAT 卷产生的附属文件
+._*
+.DS_Store
+
+# 本地备份与构建中间产物
+*.bak
+*.bak-*
+__pycache__/
+*.pyc
+node_modules/
+dist/
+
+# 编辑器
+.idea/
+.vscode/
