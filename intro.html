@@ -2,110 +2,146 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"/>
-<title>人间样本 · 给写作者的真人性格切片库</title>
-<meta name="description" content="人间样本是一个给小说、剧本作者用的素材库：收录真实世界里性格极端、处事方式有戏剧性的人，重点是「具体怎么做的」，不是八卦。"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<!-- 这一页允许搜索引擎收录；站内的具体人物条目仍然 noindex，只能通过链接访问 -->
-<meta name="robots" content="index,follow"/>
-<meta property="og:type" content="website"/>
-<meta property="og:title" content="人间样本 · 给写作者的真人性格切片库"/>
-<meta property="og:description" content="96 个真人样本 + 三条写作方法轨 + 角色配方。写人物的参考，不是八卦合集。"/>
+<title>关于人间样本 · 收录标准与脱敏原则｜人间样本</title>
+<meta name="description" content="人间样本是什么：31 位真人传记 + 65 个脱敏性格原型，收录标准、脱敏原则与免责声明。"/>
+<meta name="robots" content="index,follow,max-image-preview:large"/>
 <link rel="canonical" href="https://human-samples.github.io/intro.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="人间样本"/>
+<meta property="og:title" content="关于人间样本 · 收录标准与脱敏原则｜人间样本"/>
+<meta property="og:description" content="人间样本是什么：31 位真人传记 + 65 个脱敏性格原型，收录标准、脱敏原则与免责声明。"/>
 <meta property="og:url" content="https://human-samples.github.io/intro.html"/>
+<meta name="twitter:card" content="summary"/>
+
 <style>
 :root{
   --paper:#faf9f6; --surface:#fff; --ink:#202a30; --ink2:#303c42; --ink3:#59656b; --ink4:#8a9498;
   --line:#dfe4e1; --line-soft:#e9ede9; --sunk:#f0f2ee;
-  --accent:#176b75; --accent-soft:#176b7514; --hot:#b3402a; --hot-soft:#b3402a12;
-  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,serif;
+  --accent:#176b75; --accent-soft:#176b7514; --hot:#b3402a; --hot-soft:#b3402a0f;
+  --amber:#b8873a;
+  --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif SC",Georgia,serif;
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);
-  font:16px/1.75 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  font:16px/1.78 system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   -webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:720px;margin:0 auto;padding:64px 24px 80px}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:44px}
-.mark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
-  background:linear-gradient(140deg,var(--accent),#145f68);color:#fff;font-size:14px;font-weight:800}
-.brand b{font-size:16px;letter-spacing:.02em}
-.brand em{font-style:normal;font-size:10px;letter-spacing:.16em;color:var(--ink4);text-transform:uppercase}
-h1{font-family:var(--serif);font-size:40px;line-height:1.35;font-weight:700;letter-spacing:.01em;margin:0 0 16px}
-.lede{font-size:17px;color:var(--ink2);line-height:1.9;margin:0 0 12px}
-.sub{font-size:14.5px;color:var(--ink3);line-height:1.85;margin:0 0 44px}
-h2{font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--ink4);margin:44px 0 14px;text-transform:uppercase}
-ul{margin:0;padding:0;list-style:none}
-li{position:relative;padding-left:18px;margin:9px 0;font-size:15px;line-height:1.8;color:var(--ink2)}
-li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:99px;background:var(--accent)}
-li b{font-weight:650;color:var(--ink)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
-.card .who{font-size:15px;font-weight:650;margin-bottom:6px}
-.card .row{font-size:13.5px;color:var(--ink3);line-height:1.75}
-.card .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-right:6px}
-.cta{display:inline-flex;align-items:center;gap:8px;margin-top:44px;height:46px;padding:0 26px;
-  border-radius:999px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;
-  box-shadow:0 6px 18px #176b7533}
-.cta:hover{background:#145f68}
-.note{margin-top:52px;padding-top:20px;border-top:1px solid var(--line-soft);
-  font-size:12.5px;color:var(--ink4);line-height:1.9}
-.note b{color:var(--ink3);font-weight:600}
-@media (max-width:600px){h1{font-size:30px}.wrap{padding:40px 20px 60px}}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+header.top{border-bottom:1px solid var(--line-soft);background:rgba(250,249,246,.92);
+  position:sticky;top:0;z-index:9;backdrop-filter:blur(8px)}
+.top-in{max-width:760px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:14px}
+.mark{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(140deg,var(--accent),#145f68);color:#fff;font-size:13px;font-weight:800}
+.brand{font-weight:700;letter-spacing:.02em;font-size:15px}
+.brand small{display:block;font-weight:400;font-size:10px;letter-spacing:.14em;color:var(--ink4)}
+nav.m{margin-left:auto;display:flex;gap:18px;font-size:13px;color:var(--ink3)}
+nav.m a:hover{color:var(--accent)}
+main{padding:44px 0 72px}
+.crumb{font-size:12px;color:var(--ink4);margin-bottom:22px}
+.crumb a:hover{color:var(--accent)}
+h1{font-family:var(--serif);font-size:34px;line-height:1.35;margin:0 0 10px;letter-spacing:.01em;font-weight:700}
+.sub{color:var(--ink3);font-size:15px;margin:0 0 6px}
+.meta{font-size:12px;color:var(--ink4);display:flex;flex-wrap:wrap;gap:12px;margin:16px 0 0}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;background:var(--accent-soft);
+  color:var(--accent);font-size:11px;margin:0 6px 6px 0}
+.lede{font-family:var(--serif);font-size:19px;line-height:1.85;color:var(--ink2);margin:26px 0 0;
+  padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+h2{font-size:13px;letter-spacing:.16em;color:var(--ink4);font-weight:700;margin:42px 0 14px;
+  text-transform:uppercase}
+h2::before{content:"";display:inline-block;width:14px;height:1px;background:var(--accent);
+  vertical-align:middle;margin-right:9px}
+ol.methods{margin:0;padding:0;list-style:none;counter-reset:m}
+ol.methods li{counter-increment:m;position:relative;padding:0 0 0 34px;margin:0 0 16px;line-height:1.8}
+ol.methods li::before{content:counter(m,decimal-leading-zero);position:absolute;left:0;top:1px;
+  font:700 11px/1.9 ui-monospace,Menlo,monospace;color:var(--accent)}
+ul.plain{margin:0;padding-left:19px}
+ul.plain li{margin:0 0 9px;line-height:1.8}
+.tl{margin:0;padding:0;list-style:none;border-left:1px solid var(--line)}
+.tl li{position:relative;padding:0 0 20px 22px;line-height:1.8}
+.tl li::before{content:"";position:absolute;left:-4px;top:9px;width:7px;height:7px;border-radius:50%;
+  background:var(--paper);border:1.5px solid var(--accent)}
+.tl b{display:block;font-size:12px;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:2px}
+blockquote{margin:0 0 12px;padding:12px 18px;border-left:2px solid var(--amber);
+  background:var(--surface);font-family:var(--serif);font-size:16px;line-height:1.9;color:var(--ink2)}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;
+  line-height:1.9;font-size:15px;color:var(--ink2)}
+.grid2{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:15px 16px;
+  display:block;transition:.16s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card b{font-family:var(--serif);font-size:16px;display:block;margin-bottom:5px}
+.card span{font-size:12.5px;color:var(--ink3);line-height:1.6;display:block}
+.card em{font-style:normal;font-size:11px;color:var(--accent);letter-spacing:.06em}
+.sect{margin:52px 0 0}
+.sect > h2{margin-top:0}
+.pager{display:flex;justify-content:space-between;gap:16px;margin:52px 0 0;padding-top:24px;
+  border-top:1px solid var(--line-soft);font-size:13px}
+.pager a{color:var(--accent)}
+footer{border-top:1px solid var(--line-soft);padding:30px 0 60px;font-size:12px;color:var(--ink4);line-height:2}
+footer a{color:var(--ink3);border-bottom:1px solid var(--line)}
+.hero{padding:18px 0 0}
+.hero h1{font-size:40px}
+.hero p{font-size:16.5px;color:var(--ink3);max-width:620px;line-height:1.9}
+.rows{border-top:1px solid var(--line-soft);margin-top:8px}
+.row{display:flex;gap:14px;padding:14px 2px;border-bottom:1px solid var(--line-soft);align-items:baseline}
+.row a{font-family:var(--serif);font-size:16px;font-weight:600;flex:none;min-width:8em}
+.row span{font-size:13px;color:var(--ink3);line-height:1.65}
+.row em{font-style:normal;margin-left:auto;font-size:11px;color:var(--ink4);flex:none}
+@media(max-width:640px){
+  h1{font-size:27px} .hero h1{font-size:31px} nav.m{gap:12px;font-size:12px}
+  .top-in{padding:12px 18px} .wrap{padding:0 18px} .row{flex-wrap:wrap} .row em{margin-left:0}
+  .lede{font-size:17px;padding:18px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="brand">
-    <span class="mark">人</span>
-    <span><b>人间样本</b><br/><em>Samples</em></span>
-  </div>
+<header class="top"><div class="top-in">
+  <div class="mark">样</div>
+  <a class="brand" href="/">人间样本<small>RENJIAN SAMPLES</small></a>
+  <nav class="m"><a href="/">首页</a><a href="/c/legends.html">人物志</a><a href="/yuanxing.html">原型库</a><a href="/intro.html">关于</a></nav>
+</div></header>
+<main><div class="wrap">
+<div class="crumb"><a href="/">首页</a> › <span>关于</span></div>
+<h1>关于人间样本</h1>
+<p class="sub">一个给小说、剧本作者用的人物素材库</p>
 
-  <h1>给写作者的一间<br/>人物素材库</h1>
-  <p class="lede">
-    真实世界里，有一类人特别值得写：他们的性格极端，处事方式有戏剧性，
-    但又不是新闻里的“反派”——他们讲道理、有逻辑，只是那套逻辑只对自己有利。
-  </p>
-  <p class="sub">
-    人间样本把他们收进来，不写八卦，写三件事：这个人什么性格、他具体怎么做的、这种人能写成什么角色。
-  </p>
+<p class="lede">写作卡住的时候，多数人缺的不是文笔，是「这个人具体会怎么做」。这里收集的是动作，不是形容词。</p>
 
-  <h2>里面有什么</h2>
-  <div class="card">
-    <div class="who">64 个真人样本</div>
-    <div class="row">
-      <span class="tag">性格标签</span><span class="tag">处事方式</span><span class="tag">能写成什么角色</span><br/>
-      每条都拆成可复用的零件：性格标签，「处事方式」写成可以照做的动作而不是评价，
-      再加一段“这种人适合写成谁、能撑起什么情节”。
-    </div>
-  </div>
-  <div class="card">
-    <div class="who">三条写作方法轨</div>
-    <div class="row">
-      编剧版、类型小说版、严肃文学版。每一课都标了书面出处（麦基、特鲁比、埃格里、福斯特……），
-      配 15 分钟练习和一份验收清单；学完整条轨会有一张结业证书。
-    </div>
-  </div>
-  <div class="card">
-    <div class="who">角色配方</div>
-    <div class="row">
-      把素材搭成叙事结构的现成配方：母女死局、表演型深情 × 沉默履约、蛰伏者的复仇……
-      每个配方给出角色位、分幕节拍和“为什么这样搭”。
-    </div>
-  </div>
-
-  <h2>适合谁</h2>
-  <ul>
-    <li>写小说、短剧、剧本的人，卡在“这场戏这个人会怎么反应”的时候</li>
-    <li>想找人物原型，又不想只靠想象的人</li>
-    <li>已经在写、想给配角加一点真实质感的人</li>
-  </ul>
-
-  <a class="cta" href="index.html">进入素材库 →</a>
-
-  <p class="note">
-    <b>关于内容</b>：所有样本都来自公开报道，并在条目内标注信源，不做价值判断，也不收录未经证实的指控。
-    <br/>
-    <b>关于收录</b>：这一页允许搜索引擎收录；站内的具体人物条目不对搜索引擎开放，只通过链接访问。
-  </p>
+<h2>收录什么</h2>
+<div class="note">
+<p style="margin:0 0 10px"><b>人物志（31 条）</b>：把一件事做到无人能替代的真人——科学家、翻译家、劳模、手艺人。整理自公开报道与公开资料，页内逐条标注来源，可直接核对。</p>
+<p style="margin:0 0 10px"><b>原型库（65 条）</b>：从公共事件里抽出来的性格切片。真实姓名、机构、精确金额与日期已全部删除或泛化，只保留行为结构、心理机制和关系网。这些条目不指向任何可识别的个人。</p>
+<p style="margin:0">每条都尽量回答同一个问题：<b>他/她具体是怎么做的</b>——分几步、在哪个环节让了、代价落到了谁身上。</p>
 </div>
+
+<h2>脱敏原则</h2>
+<div class="note">
+<p style="margin:0 0 10px">原型库条目在发布前经过统一处理：删除全部人名（含亲属、对手）、机构与品牌名、节目与作品名、精确金额、市级以下地名、可被检索命中一手引语；时间模糊到年月或相对时点。</p>
+<p style="margin:0">保留的是因果、动机与防御方式。如果某条让你想起身边的人，那是原型层面的普遍性，不是指认。</p>
+</div>
+
+<h2>怎么用</h2>
+<div class="note">
+<p style="margin:0 0 10px">1. 先按分类找结构：控制型父母、翻车后的辩解、权力现场的切割。<br/>
+2. 抄「具体怎么做的」那一栏去改造你的角色，别抄评价。<br/>
+3. 页底的「写作怎么用」和「角色参数」是给卡文时用的脚手架。</p>
+</div>
+
+<h2>免责与联系</h2>
+<div class="note" style="font-size:14px">
+本站为写作参考工具，不提供新闻、不评价具体个人、不构成任何事实认定。原型库不含可识别个人信息；人物志内容如有事实错误或来源失效，欢迎指正，会据实修订或删除。<br/>
+联系：<a href="mailto:hello@human-samples.github.io" style="color:var(--accent)">hello@human-samples.github.io</a>
+</div>
+
+<div class="pager"><a href="/">← 回到首页</a><a href="/c/legends.html">看人物志 →</a></div>
+
+</div></main>
+<footer><div class="wrap">
+  <p><b>人间样本</b> · 真实人物的性格切片与处事样本 · 写作者的人物原型库</p>
+  <p>原型库条目均为脱敏改写，不含真实姓名与可识别信息；人物志条目整理自公开报道，来源标注于页内。<br/>
+  <a href="/intro.html">收录标准与免责声明</a> · <a href="/sitemap.xml">站点地图</a></p>
+</div></footer>
 </body>
 </html>
