@@ -187,7 +187,7 @@ footer a{{color:var(--ink3);border-bottom:1px solid var(--line)}}
 <header class="top"><div class="top-in">
   <div class="mark">样</div>
   <a class="brand" href="/">人间样本<small>RENJIAN SAMPLES</small></a>
-  <nav class="m"><a href="/">首页</a><a href="/c/legends.html">人物志</a><a href="/yuanxing.html">原型库</a><a href="/intro.html">关于</a></nav>
+  <nav class="m"><a href="/">首页</a><a href="/c/legends.html">人物志</a><a href="/yuanxing.html">原型库</a><a href="/fangfa.html">方法</a><a href="/intro.html">关于</a></nav>
 </div></header>
 <main><div class="wrap">
 {body}
@@ -338,23 +338,34 @@ def render_home(items):
 </section>
 
 <section class="sect">
+<h2>写作方法</h2>
+<p style="color:var(--ink3);font-size:14.5px;margin:-4px 0 14px;max-width:640px">
+卡文的时候先看方法，再去库里挑人练。11 条方法来自福斯特、麦基、特鲁比，6 个配方是能直接套的关系结构。</p>
+<div class="grid2">
+  <a class='card' href='/fangfa.html'><b>全部方法与配方</b><span>扁平人物、冰山理论、冲突设计</span><em>17 条</em></a>
+  <a class='card' href='/r/mother-daughter-deadlock.html'><b>母女死局</b><span>控制型母亲 × 沉默供养者 × 想要回应的女儿</span></a>
+  <a class='card' href='/m/forster-round-flat.html'><b>扁平人物不是差人物，是尖刺</b><span>福斯特《小说面面观》</span></a>
+</div>
+</section>
+
+<section class="sect">
 <h2>关于收录</h2>
 <div class="note">人物志条目整理自公开报道，页内标注来源；原型库条目经过脱敏改写，不含真实姓名、机构名与精确可检索信息。
 完整收录标准与免责声明见 <a href="/intro.html" style="color:var(--accent)">关于页</a>。</div>
 </section>
 """
 
-    desc = f"人间样本收录 {len(persons)} 位真人传记与 {len(protos)} 个脱敏性格原型，每条写清「具体怎么做的」，供小说、剧本的人物塑造参考。"
+    desc = f"人间样本是一个人物原型库：{len(persons)} 位真人传记 + {len(protos)} 个脱敏性格原型，每条写清「具体怎么做的」，供小说、剧本的人物塑造参考。"
     jsonld = {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": SITE_NAME,
-        "alternateName": TAGLINE,
+        "alternateName": ["人间样本 人物原型库", "人间样本 人物素材库", "人间样本 写作素材"],
         "url": SITE + "/",
         "description": desc,
         "inLanguage": "zh-CN",
     }
-    return page_shell(f"人间样本 · 真人传记与性格原型库（{len(items)} 条）", desc, SITE + "/", body, jsonld)
+    return page_shell(f"人间样本 · 人物原型库｜{len(items)} 条真人传记与脱敏样本", desc, SITE + "/", body, jsonld)
 
 
 def render_category(cat, items):
@@ -468,6 +479,140 @@ def render_prototypes(items):
     return page_shell(f"原型库 · {len(protos)} 个脱敏性格原型｜{SITE_NAME}", desc, SITE + "/yuanxing.html", body, jsonld)
 
 
+
+def load_craft():
+    return json.load(open(os.path.join(ROOT, "source/craft_public.json"), encoding="utf-8"))
+
+
+
+def md_any(v):
+    """把 str / list / dict 统一渲染成可读 HTML，避免出现 Python 字面量。"""
+    if v is None or v == "":
+        return ""
+    if isinstance(v, str):
+        return f"<p style='margin:0 0 10px'>{E(v)}</p>"
+    if isinstance(v, list):
+        if v and isinstance(v[0], (list, dict)):
+            return "".join(md_any(x) for x in v)
+        return "<ul class='plain'>" + "".join(f"<li>{E(x)}</li>" for x in v) + "</ul>"
+    if isinstance(v, dict):
+        labels = {"task": "任务", "time": "用时", "output": "产出", "id": "", "title": ""}
+        rows = "".join(
+            f"<p style='margin:0 0 8px'>{('<b>' + labels.get(k, k) + '</b>：') if labels.get(k, k) else ''}{E(str(x))}</p>"
+            for k, x in v.items() if x)
+        return "<div class='note'>" + rows + "</div>"
+    return f"<p>{E(str(v))}</p>"
+
+def render_craft(c, craft, all_items):
+    name_by_id = {it["id"]: it for it in all_items}
+    n = c
+    body = [f"""<div class="crumb"><a href="/">首页</a> › <a href="/fangfa.html">写作方法</a> › <span>{E(n['title'])}</span></div>
+<h1>{E(n['title'])}</h1>
+<p class="lede">{E(n.get('oneLiner',''))}</p>
+<div class="meta"><span>{E(n.get('category',''))}</span><span>{E(n.get('source',''))}</span></div>"""]
+
+    if n.get("howto"):
+        body.append("<h2>怎么做</h2><ol class='methods'>" + "".join(f"<li>{E(x)}</li>" for x in n["howto"]) + "</ol>")
+    if n.get("example"):
+        body.append(f"<h2>例子</h2><div class='note'>{E(n['example'])}</div>")
+    if n.get("quote"):
+        body.append(f"<h2>原话</h2><blockquote>{E(n['quote'])}</blockquote><p style='font-size:12px;color:var(--ink4)'>—— {E(n.get('author',''))}</p>")
+    if n.get("drill"):
+        body.append("<h2>练习</h2>" + md_any(n["drill"]))
+    if n.get("check"):
+        body.append("<h2>自检</h2>" + md_any(n["check"]))
+    if n.get("pitfalls"):
+        body.append("<h2>常见坑</h2>" + md_any(n["pitfalls"]))
+    if n.get("linkHint") and n.get("links"):
+        links = [name_by_id[i] for i in n["links"] if i in name_by_id]
+        body.append(f"<h2>拿库里的人来练</h2><div class='note'>{E(n['linkHint'])}</div><div class='grid2'>" + "".join(
+            f"<a class='card' href='/p/{E(x['id'])}.html'><b>{E(x['name'])}</b><span>{E((x.get('identity') or '').split('·')[0].strip())}</span></a>"
+            for x in links) + "</div>")
+
+    same = [x for x in craft["crafts"] if x["category"] == n["category"] and x["id"] != n["id"]][:3]
+    if same:
+        body.append("<h2>同类方法</h2><div class='grid2'>" + "".join(
+            f"<a class='card' href='/m/{E(x['id'])}.html'><b>{E(x['title'])}</b><span>{E(x.get('oneLiner','')[:40])}</span></a>"
+            for x in same) + "</div>")
+    body.append('<div class="pager"><a href="/fangfa.html">← 全部写作方法</a><a href="/">回到首页 →</a></div>')
+
+    desc = short_desc(n.get("oneLiner", "") + " " + (n.get("howto") or [""])[0], 112)
+    title = f"{n['title']}｜写作方法｜{SITE_NAME}"
+    jsonld = {"@context": "https://schema.org", "@type": "Article", "headline": n["title"],
+              "description": desc, "dateModified": TODAY, "inLanguage": "zh-CN",
+              "author": {"@type": "Organization", "name": SITE_NAME},
+              "publisher": {"@type": "Organization", "name": SITE_NAME, "url": SITE},
+              "mainEntityOfPage": f"{SITE}/m/{n['id']}.html"}
+    return page_shell(title, desc, f"{SITE}/m/{n['id']}.html", "".join(body), jsonld, "article")
+
+
+def render_recipe(r, craft, all_items):
+    name_by_id = {it["id"]: it for it in all_items}
+    body = [f"""<div class="crumb"><a href="/">首页</a> › <a href="/fangfa.html">写作方法</a> › <span>{E(r['title'])}</span></div>
+<h1>{E(r['title'])}</h1>
+<p class="lede">{E(r.get('formula',''))}</p>"""]
+
+    if r.get("cast"):
+        body.append("<h2>三个人物位置</h2><div class='note'>" + "".join(
+            f"<p style='margin:0 0 10px'><b>{E(c.get('role',''))}</b>"
+            + (f" → <a href='/p/{E(c['from'])}.html' style='color:var(--accent)'>{E(name_by_id[c['from']]['name'])}</a>" if c.get("from") in name_by_id else "")
+            + "</p>" for c in r["cast"]) + "</div>")
+    if r.get("structure"):
+        body.append(f"<h2>结构</h2><div class='note'>{E(r['structure'])}</div>")
+    if r.get("beats"):
+        body.append("<h2>节拍</h2><ol class='methods'>" + "".join(f"<li>{E(x)}</li>" for x in r["beats"]) + "</ol>")
+    if r.get("why"):
+        body.append(f"<h2>为什么成立</h2><div class='note'>{E(r['why'])}</div>")
+    if r.get("techniques"):
+        t = r["techniques"]
+        cmap = {c["id"]: c for c in craft["crafts"]}
+        if isinstance(t, list):
+            items = []
+            for x in t:
+                if x in cmap:
+                    items.append(f"<li><a href='/m/{E(x)}.html' style='color:var(--accent)'>{E(cmap[x]['title'])}</a></li>")
+                else:
+                    items.append(f"<li>{E(x)}</li>")
+            body.append("<h2>用到的技法</h2><ul class='plain'>" + "".join(items) + "</ul>")
+        else:
+            body.append("<h2>用到的技法</h2>" + md_any(t))
+    body.append('<div class="pager"><a href="/fangfa.html">← 全部写作方法</a><a href="/">回到首页 →</a></div>')
+
+    desc = short_desc(r.get("formula", "") + " " + (r.get("structure") or ""), 112)
+    title = f"{r['title']}｜人物关系配方｜{SITE_NAME}"
+    jsonld = {"@context": "https://schema.org", "@type": "Article", "headline": r["title"],
+              "description": desc, "dateModified": TODAY, "inLanguage": "zh-CN",
+              "author": {"@type": "Organization", "name": SITE_NAME},
+              "publisher": {"@type": "Organization", "name": SITE_NAME, "url": SITE},
+              "mainEntityOfPage": f"{SITE}/r/{r['id']}.html"}
+    return page_shell(title, desc, f"{SITE}/r/{r['id']}.html", "".join(body), jsonld, "article")
+
+
+def render_fangfa(craft):
+    tracks = {t["id"]: t for t in craft["tracks"]}
+    blocks = []
+    for c in craft["crafts"]:
+        blocks.append(f"<div class='row'><a href='/m/{E(c['id'])}.html'>{E(c['title'])}</a>"
+                      f"<span>{E(c.get('oneLiner','')[:56])}</span><em>{E(c.get('source',''))}</em></div>")
+    recipes = "".join(
+        f"<div class='row'><a href='/r/{E(r['id'])}.html'>{E(r['title'])}</a>"
+        f"<span>{E(r.get('formula','')[:56])}</span></div>" for r in craft["recipes"])
+
+    body = f"""<div class="crumb"><a href="/">首页</a> › <span>写作方法</span></div>
+<h1>写作方法 · {len(craft['crafts'])} 条 + {len(craft['recipes'])} 个配方</h1>
+<p class="lede">这些不是要你照搬的公式，是从麦基、埃格里、特鲁比、福斯特、刘和平和一线写作课里挑出来的、能立刻用在素材上的方法。每条都挂了库里的人物，看完直接去练。</p>
+<h2>方法</h2><div class="rows">{''.join(blocks)}</div>
+<h2>人物关系配方</h2><div class="rows">{recipes}</div>
+<div class="pager"><a href="/">← 回到首页</a><a href="/yuanxing.html">去原型库挑人 →</a></div>
+"""
+    desc = f"{len(craft['crafts'])} 条写作方法与 {len(craft['recipes'])} 个人物关系配方：扁平人物、冰山理论、四维填表、冲突设计，每条都配库里的实例。"
+    jsonld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "写作方法",
+              "description": desc, "url": SITE + "/fangfa.html",
+              "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "url": SITE}}
+    return page_shell(f"写作方法 · 人物塑造与冲突设计（{len(craft['crafts'])} 条）｜{SITE_NAME}", desc,
+                      SITE + "/fangfa.html", body, jsonld)
+
+
 def main():
     items, data = load_items()
     print(f"可发布条目: {len(items)}（人物志 {len([x for x in items if x['kind']=='person'])} / 原型库 {len([x for x in items if x['kind']=='prototype'])}）")
@@ -482,12 +627,23 @@ def main():
         write(f"c/{CAT_SLUG[cat]}.html", render_category(cat, items))
     write("intro.html", render_about(items))
     write("yuanxing.html", render_prototypes(items))
+
+    craft = load_craft()
+    for c in craft["crafts"]:
+        write(f"m/{c['id']}.html", render_craft(c, craft, items))
+    for r in craft["recipes"]:
+        write(f"r/{r['id']}.html", render_recipe(r, craft, items))
+    write("fangfa.html", render_fangfa(craft))
+    print(f"  方法页 {len(craft['crafts'])} 个 + 配方页 {len(craft['recipes'])} 个")
     print(f"  首页 {total/1024:.0f} KB，分类页 {len(CAT_SLUG)} 个，关于页 1 个")
 
     urls = [(SITE + "/", "1.0", "daily"), (SITE + "/yuanxing.html", "0.9", "weekly"),
             (SITE + "/intro.html", "0.8", "monthly")]
     urls += [(f"{SITE}/c/{CAT_SLUG[c]}.html", "0.8", "weekly") for c in CAT_SLUG]
     urls += [(item_url(it), "0.7", "monthly") for it in items]
+    urls.append((SITE + "/fangfa.html", "0.8", "monthly"))
+    urls += [(f"{SITE}/m/{c['id']}.html", "0.7", "monthly") for c in craft["crafts"]]
+    urls += [(f"{SITE}/r/{r['id']}.html", "0.7", "monthly") for r in craft["recipes"]]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u, p, f in urls:
         sm.append(f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod><changefreq>{f}</changefreq><priority>{p}</priority></url>")
